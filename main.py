@@ -2,8 +2,9 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
-import time
 import os
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 def save_and_continue():
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton2").click()
@@ -47,6 +48,14 @@ def dropdown_process(id,text):
 
     dropdown_ele.select_by_visible_text(text)
 
+def Explicit_Wait_func(element_to_wait_for_id):
+    wait = WebDriverWait(driver, 10)
+
+    ele=wait.until(EC.visibility_of_element_located((By.ID, element_to_wait_for_id)))
+
+    if ele.get_attribute("type") == "text":
+        wait.until(EC.element_to_be_clickable((By.ID, element_to_wait_for_id)))
+
 def first_page():
     driver.get("https://ceac.state.gov/genniv/")
 
@@ -57,7 +66,7 @@ def first_page():
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_newApplication").click()
 
 def second_page():
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_lblBarcode")
 
     Application_ID_Element=driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_lblBarcode")
     Application_ID=Application_ID_Element.text
@@ -74,6 +83,7 @@ def second_page():
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_btnContinue").click()
 
 def personal_one():
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_SURNAME")
 
     sel_allchkbox("fieldset-group")
 
@@ -106,8 +116,7 @@ def personal_one():
     save_and_continue()
 
 def personal_two():
-
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_NATL")
 
     no_selected("fieldset-group")
 
@@ -118,17 +127,17 @@ def personal_two():
     save_and_continue()
 
 def travel():
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlPurposeOfTrip")
 
     no_selected("fieldset-group")
 
     dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlPurposeOfTrip","TEMP. BUSINESS PLEASURE VISITOR (B)")
 
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlOtherPurpose")
 
     dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlOtherPurpose","BUSINESS & TOURISM (TEMPORARY VISITOR) (B1/B2)")
 
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEDay")
 
     Travel_Day="ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEDay"
     Travel_Month="ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEMonth"
@@ -139,7 +148,7 @@ def travel():
 
     dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_LOS_CD","Week(s)")
 
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_tbxStreetAddress1")
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxStreetAddress1").send_keys("1250 1ST AVE")
 
@@ -154,21 +163,21 @@ def travel():
     save_and_continue()
 
 def travel_companions():
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_lblOtherPersonsTravelingWithYou")
 
     no_selected("fieldset-group")
 
     save_and_continue()
 
 def previous_travel():
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_lblPREV_US_TRAVEL_IND")
     
     no_selected("fieldset-group")
 
     save_and_continue()
 
 def address_and_phone():
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_LN1")
 
     sel_allchkbox("fieldset-group")
 
@@ -190,7 +199,7 @@ def address_and_phone():
 
     dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl00_ddlSocialMedia","QZONE (QQ)")
 
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl00_tbxSocialMediaIdent")
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl00_tbxSocialMediaIdent").send_keys("123456789")
 
@@ -199,17 +208,19 @@ def address_and_phone():
     save_and_continue()
 
 def passport_info():
-    time.sleep(Pause_Time)
+    driver.implicitly_wait(Pause_Time)
 
     sel_allchkbox("fieldset-group")
 
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_rblLOST_PPT_IND_1").click()
+
     dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_TYPE","REGULAR")
 
-    time.sleep(Pause_Time)
+    driver.implicitly_wait(Pause_Time)
     
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_NUM").send_keys("F57412589")
 
-    time.sleep(Pause_Time)
+    driver.implicitly_wait(Pause_Time)
 
     dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_CNTRY","CHINA")
 
@@ -224,12 +235,10 @@ def passport_info():
     Issued_Year="ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUEDYear"
     DOB_input(Issued_Day,"02",Issued_Month,"JAN",Issued_Year,"2020")
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_rblLOST_PPT_IND_1").click()
-
     save_and_continue()
 
 def contract_info():
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_cbxUS_POC_NAME_NA")
 
     Not_Know=driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_cbxUS_POC_NAME_NA")
     if not Not_Know.is_selected():
@@ -239,7 +248,7 @@ def contract_info():
 
     dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_REL_TO_APP","OTHER")
 
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN1")
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN1").send_keys("1250 1ST AVE")
 
@@ -256,24 +265,24 @@ def contract_info():
     save_and_continue()
 
 def family_info():
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_lblFATHER_SURNAME")
 
     sel_allchkbox("fieldset-group")
 
     no_selected("fieldset-group")
 
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_rblUS_OTHER_RELATIVE_IND_1")
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_rblUS_OTHER_RELATIVE_IND_1").click()
 
     save_and_continue()
 
 def present_work():
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_ddlPresentOccupation")
 
     dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlPresentOccupation","ENGINEERING")
 
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchName")
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchName").send_keys("PEKING UNIVERSITY")
 
@@ -301,14 +310,14 @@ def present_work():
     save_and_continue()
 
 def previous_work():
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_lblPreviouslyEmployed")
 
     no_selected("fieldset-group")
 
     save_and_continue()
    
 def additional_work():
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_lblCLAN_TRIBE_IND")
 
     no_selected("fieldset-group")
 
@@ -317,29 +326,29 @@ def additional_work():
     save_and_continue()
 
 def security_check():
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_Label5")
 
     no_selected("fieldset-group")
 
     save_and_continue()
 
 def photo_uploaded():
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_btnUploadPhoto")
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_btnUploadPhoto").click()
 
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_cphMain_imageFileUpload")
 
     upload_button = driver.find_element(By.ID,"ctl00_cphMain_imageFileUpload")
     upload_button.send_keys(image_path)
 
     driver.find_element(By.ID, "ctl00_cphButtons_btnUpload").click()
 
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_cphButtons_btnContinue")
 
     driver.find_element(By.ID, "ctl00_cphButtons_btnContinue").click()
 
-    time.sleep(Pause_Time)
+    Explicit_Wait_func("ctl00_SiteContentPlaceHolder_btnUploadPhoto")
 
     save_and_continue()
 
