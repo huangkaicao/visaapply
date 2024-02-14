@@ -1,0 +1,85 @@
+{
+    "first_page": {
+        "location": "CHINA, BEIJING"
+    },
+    "second_page": {
+        "security_question": "What is the given name of your father's father?",
+        "security_answer": "JACK",
+        "return_date": "2024-04-10"
+    },
+    "personal_one": {
+        "surname": "ZHANG",
+        "given_name": "SAN",
+        "gender": "MALE",
+        "marital_status": "SINGLE",
+        "day": "01",
+        "month": "JAN",
+        "year": "1990",
+        "city": "BEIJING",
+        "country": "CHINA"
+    },
+    "personal_two": {
+        "country": "CHINA"
+    },
+    "travel": {
+        "purpose_of_trip": "TEMP. BUSINESS PLEASURE VISITOR (B)",
+        "specify": "BUSINESS & TOURISM (TEMPORARY VISITOR) (B1/B2)",
+        "day": "01",
+        "month": "JAN",
+        "year": "2025",
+        "length": "1",
+        "time_unit": "Week(s)",
+        "street_address": "1250 1ST AVE",
+        "city": "SEATTLE",
+        "state": "WASHINGTON",
+        "zip_code": "98123",
+        "paying": "Self"
+    },
+    "address_and_phone": {
+        "street_address": "1 Guangcai Rd, Fengtai District",
+        "city": "BEIJING",
+        "country": "CHINA",
+        "tel": "15601235678",
+        "email": "123456789@qq.com",
+        "social_media_name": "QZONE (QQ)",
+        "social_media_account": "123456789"
+    },
+    "passport_info": {
+        "type": "REGULAR",
+        "number": "F57412589",
+        "country": "CHINA",
+        "city": "BEIJING",
+        "province": "BEIJING",
+        "day": "02",
+        "month": "JAN",
+        "year": "2020"
+    },
+    "contract_info": {
+        "org": "DEMOCRATIC",
+        "relationship": "OTHER",
+        "street_address": "1250 1ST AVE",
+        "city": "SEATTLE",
+        "state": "WASHINGTON",
+        "zip_code": "98123",
+        "tel": "15601235678",
+        "email": "123456789@qq.com"
+    },
+    "present_work": {
+        "occupation": "ENGINEERING",
+        "company": "PEKING UNIVERSITY",
+        "street_address": "1 Guangcai Rd, Fengtai District",
+        "city": "BEIJING",
+        "province": "BEIJING",
+        "zip_code": "100021",
+        "tel": "5678888",
+        "country": "CHINA",
+        "day": "15",
+        "month": "MAR",
+        "year": "2010",
+        "salary": "10000",
+        "detailed_duty": "WORKING"
+    },
+    "additional_work": {
+        "language": "CHINESE"
+    }
+}

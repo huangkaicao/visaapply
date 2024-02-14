@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import Select
 import os
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import json
 
 def save_and_continue():
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton2").click()
@@ -57,15 +58,19 @@ def Explicit_Wait_func(element_to_wait_for_id):
         wait.until(EC.element_to_be_clickable((By.ID, element_to_wait_for_id)))
 
 def first_page():
+    first_page = data_filled["first_page"]
+
     driver.get("https://ceac.state.gov/genniv/")
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_ucLocation_ddlLocation","CHINA, BEIJING")
+    dropdown_process("ctl00_SiteContentPlaceHolder_ucLocation_ddlLocation",first_page["location"])
 
     input("验证码识别功能敬请期待，目前请手动在浏览器中输入验证码后，在terminal按回车键继续...")
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_newApplication").click()
 
 def second_page():
+    second_page = data_filled["second_page"]
+
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_lblBarcode")
 
     Application_ID_Element=driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_lblBarcode")
@@ -74,91 +79,101 @@ def second_page():
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_chkbxPrivacyAct").click()
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_ddlQuestions","What is the given name of your father's father?")
+    dropdown_process("ctl00_SiteContentPlaceHolder_ddlQuestions",second_page["security_question"])
 
-    ANS="JACK"
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_txtAnswer").send_keys(ANS)
-    print("请记下您的密保问题答案：", ANS)
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_txtAnswer").send_keys(second_page["security_answer"])
+    print("请记下您的密保问题答案：", second_page["security_answer"])
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_btnContinue").click()
 
 def personal_one():
+    personal_one = data_filled["personal_one"]
+
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_SURNAME")
 
     sel_allchkbox("fieldset-group")
 
-    SURNAME="ZHANG"
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_SURNAME").send_keys(SURNAME)
-    print("请记下您填写的SURNAME：", SURNAME)
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_SURNAME").send_keys(personal_one['surname'])
+    print("请记下您填写的SURNAME：", personal_one['surname'])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_GIVEN_NAME").send_keys("SAN")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_GIVEN_NAME").send_keys(personal_one['given_name'])
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_rblOtherNames_1").click()
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_rblTelecodeQuestion_1").click()
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_GENDER","MALE")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_GENDER",personal_one['gender'])
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS","SINGLE")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS",personal_one['marital_status'])
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlDOBDay","01")
+    # dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlDOBDay",personal_one['day'])
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlDOBMonth","JAN")
+    # dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlDOBMonth",personal_one['month'])
 
-    DOBYear="1990"
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxDOBYear").send_keys(DOBYear)
-    print("请记下您填写的出生年份：", DOBYear)
+    # DOBYear=personal_one['year']
+    # driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxDOBYear").send_keys(DOBYear)
+    # print("请记下您填写的出生年份：", DOBYear)
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_POB_CITY").send_keys("BEIJING")
+    DOB_Day_id="ctl00_SiteContentPlaceHolder_FormView1_ddlDOBDay"
+    DOB_Month_id="ctl00_SiteContentPlaceHolder_FormView1_ddlDOBMonth"
+    DOB_Year_id="ctl00_SiteContentPlaceHolder_FormView1_tbxDOBYear"
+    DOB_input(DOB_Day_id,personal_one['day'],DOB_Month_id,personal_one['month'],DOB_Year_id,personal_one['year'])
+    print("请记下您填写的出生年份：", personal_one['year'])
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_POB_CNTRY","CHINA")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_POB_CITY").send_keys(personal_one['city'])
+
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_POB_CNTRY",personal_one['country'])
 
     save_and_continue()
 
 def personal_two():
+    personal_two = data_filled["personal_two"]
+
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_NATL")
 
     no_selected("fieldset-group")
 
     sel_allchkbox("fieldset-group")
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_NATL","CHINA")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_NATL",personal_two['country'])
 
     save_and_continue()
 
 def travel():
+    travel = data_filled["travel"]
+
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlPurposeOfTrip")
 
     no_selected("fieldset-group")
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlPurposeOfTrip","TEMP. BUSINESS PLEASURE VISITOR (B)")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlPurposeOfTrip",travel['purpose_of_trip'])
 
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlOtherPurpose")
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlOtherPurpose","BUSINESS & TOURISM (TEMPORARY VISITOR) (B1/B2)")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_dlPrincipalAppTravel_ctl00_ddlOtherPurpose",travel['specify'])
 
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEDay")
 
     Travel_Day="ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEDay"
     Travel_Month="ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_DTEMonth"
     Travel_Year="ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_DTEYear"
-    DOB_input(Travel_Day,"01",Travel_Month,"JAN",Travel_Year,"2025")
+    DOB_input(Travel_Day,travel['day'],Travel_Month,travel['month'],Travel_Year,travel['year'])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_LOS").send_keys("1")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxTRAVEL_LOS").send_keys(travel['length'])
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_LOS_CD","Week(s)")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlTRAVEL_LOS_CD",travel['time_unit'])
 
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_tbxStreetAddress1")
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxStreetAddress1").send_keys("1250 1ST AVE")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxStreetAddress1").send_keys(travel['street_address'])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxCity").send_keys("SEATTLE")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxCity").send_keys(travel['city'])
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlTravelState","WASHINGTON")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlTravelState",travel['state'])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbZIPCode").send_keys("98123")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbZIPCode").send_keys(travel['zip_code'])
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlWhoIsPaying","Self")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlWhoIsPaying",travel['paying'])
 
     save_and_continue()
 
@@ -177,90 +192,96 @@ def previous_travel():
     save_and_continue()
 
 def address_and_phone():
+    address_and_phone = data_filled["address_and_phone"]
+
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_LN1")
 
     sel_allchkbox("fieldset-group")
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_LN1").send_keys("1 Guangcai Rd, Fengtai District")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_LN1").send_keys(address_and_phone["street_address"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_CITY").send_keys("BEIJING")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_ADDR_CITY").send_keys(address_and_phone["city"])
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlCountry","CHINA")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlCountry",address_and_phone["country"])
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_rblMailingAddrSame_0").click()
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_HOME_TEL").send_keys("15601235678")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_HOME_TEL").send_keys(address_and_phone["tel"])
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_rblAddPhone_1").click()
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_EMAIL_ADDR").send_keys("123456789@qq.com")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxAPP_EMAIL_ADDR").send_keys(address_and_phone["email"])
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_rblAddEmail_1").click()
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl00_ddlSocialMedia","QZONE (QQ)")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl00_ddlSocialMedia",address_and_phone["social_media_name"])
 
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl00_tbxSocialMediaIdent")
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl00_tbxSocialMediaIdent").send_keys("123456789")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_dtlSocial_ctl00_tbxSocialMediaIdent").send_keys(address_and_phone["social_media_account"])
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_rblAddSocial_1").click()
 
     save_and_continue()
 
 def passport_info():
+    passport_info = data_filled["passport_info"]
+
     driver.implicitly_wait(Pause_Time)
 
     sel_allchkbox("fieldset-group")
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_rblLOST_PPT_IND_1").click()
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_TYPE","REGULAR")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_TYPE",passport_info["type"])
 
     driver.implicitly_wait(Pause_Time)
     
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_NUM").send_keys("F57412589")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_NUM").send_keys(passport_info["number"])
 
     driver.implicitly_wait(Pause_Time)
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_CNTRY","CHINA")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_CNTRY",passport_info["country"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUED_IN_CITY").send_keys("BEIJING")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUED_IN_CITY").send_keys(passport_info["city"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUED_IN_STATE").send_keys("BEIJING")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUED_IN_STATE").send_keys(passport_info["province"])
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_IN_CNTRY","CHINA")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_IN_CNTRY",passport_info["country"])
 
     Issued_Day="ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_DTEDay"
     Issued_Month="ctl00_SiteContentPlaceHolder_FormView1_ddlPPT_ISSUED_DTEMonth"
     Issued_Year="ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUEDYear"
-    DOB_input(Issued_Day,"02",Issued_Month,"JAN",Issued_Year,"2020")
+    DOB_input(Issued_Day,passport_info["day"],Issued_Month,passport_info["month"],Issued_Year,passport_info["year"])
 
     save_and_continue()
 
 def contract_info():
+    contract_info = data_filled["contract_info"]
+
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_cbxUS_POC_NAME_NA")
 
     Not_Know=driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_cbxUS_POC_NAME_NA")
     if not Not_Know.is_selected():
         Not_Know.click()
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ORGANIZATION").send_keys("DEMOCRATIC")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ORGANIZATION").send_keys(contract_info["org"])
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_REL_TO_APP","OTHER")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_REL_TO_APP",contract_info["relationship"])
 
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN1")
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN1").send_keys("1250 1ST AVE")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_LN1").send_keys(contract_info["street_address"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_CITY").send_keys("SEATTLE")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_CITY").send_keys(contract_info["city"])
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_ADDR_STATE","WASHINGTON")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlUS_POC_ADDR_STATE",contract_info["state"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_POSTAL_CD").send_keys("98123")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_ADDR_POSTAL_CD").send_keys(contract_info["zip_code"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_HOME_TEL").send_keys("4556134502")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_HOME_TEL").send_keys(contract_info["tel"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_EMAIL_ADDR").send_keys("987654321@qq.com")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_EMAIL_ADDR").send_keys(contract_info["email"])
 
     save_and_continue()
 
@@ -278,34 +299,36 @@ def family_info():
     save_and_continue()
 
 def present_work():
+    present_work = data_filled["present_work"]
+
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_ddlPresentOccupation")
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlPresentOccupation","ENGINEERING")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlPresentOccupation",present_work["occupation"])
 
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchName")
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchName").send_keys("PEKING UNIVERSITY")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchName").send_keys(present_work["company"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchAddr1").send_keys("1 Guangcai Rd, Fengtai District")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchAddr1").send_keys(present_work["street_address"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchCity").send_keys("BEIJING")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxEmpSchCity").send_keys(present_work["city"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxWORK_EDUC_ADDR_STATE").send_keys("BEIJING")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxWORK_EDUC_ADDR_STATE").send_keys(present_work["province"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxWORK_EDUC_ADDR_POSTAL_CD").send_keys("100021")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxWORK_EDUC_ADDR_POSTAL_CD").send_keys(present_work["zip_code"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxWORK_EDUC_TEL").send_keys("5678888")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxWORK_EDUC_TEL").send_keys(present_work["tel"])
 
-    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlEmpSchCountry","CHINA")
+    dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlEmpSchCountry",present_work["country"])
 
     Start_Day="ctl00_SiteContentPlaceHolder_FormView1_ddlEmpDateFromDay"
     Start_Month="ctl00_SiteContentPlaceHolder_FormView1_ddlEmpDateFromMonth"
     Start_Year="ctl00_SiteContentPlaceHolder_FormView1_tbxEmpDateFromYear"
-    DOB_input(Start_Day,"15",Start_Month,"MAR",Start_Year,"2010")
+    DOB_input(Start_Day,present_work["day"],Start_Month,present_work["month"],Start_Year,present_work["year"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxCURR_MONTHLY_SALARY").send_keys("10000")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxCURR_MONTHLY_SALARY").send_keys(present_work["salary"])
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxDescribeDuties").send_keys("WORKING")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxDescribeDuties").send_keys(present_work["detailed_duty"])
 
     save_and_continue()
 
@@ -317,11 +340,13 @@ def previous_work():
     save_and_continue()
    
 def additional_work():
+    additional_work = data_filled["additional_work"]
+
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_lblCLAN_TRIBE_IND")
 
     no_selected("fieldset-group")
 
-    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_dtlLANGUAGES_ctl00_tbxLANGUAGE_NAME").send_keys("CHINESE")
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_dtlLANGUAGES_ctl00_tbxLANGUAGE_NAME").send_keys(additional_work["language"])
 
     save_and_continue()
 
@@ -356,6 +381,10 @@ chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
 script_directory = os.path.dirname(os.path.abspath(__file__))
 image_path = os.path.join(script_directory, "testphoto", "testphoto.JPEG")
+data_path = os.path.join(script_directory, "json", "data.json")
+
+with open(data_path, 'r') as file:
+    data_filled = json.load(file)
 
 driver = webdriver.Chrome(options=chrome_options)
 Pause_Time=2
