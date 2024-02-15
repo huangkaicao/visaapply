@@ -106,14 +106,6 @@ def personal_one():
 
     dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_MARITAL_STATUS",personal_one['marital_status'])
 
-    # dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlDOBDay",personal_one['day'])
-
-    # dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlDOBMonth",personal_one['month'])
-
-    # DOBYear=personal_one['year']
-    # driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxDOBYear").send_keys(DOBYear)
-    # print("请记下您填写的出生年份：", DOBYear)
-
     DOB_Day_id="ctl00_SiteContentPlaceHolder_FormView1_ddlDOBDay"
     DOB_Month_id="ctl00_SiteContentPlaceHolder_FormView1_ddlDOBMonth"
     DOB_Year_id="ctl00_SiteContentPlaceHolder_FormView1_tbxDOBYear"
@@ -124,7 +116,8 @@ def personal_one():
 
     dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_POB_CNTRY",personal_one['country'])
 
-    save_and_continue()
+    # save_and_continue()
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton3").click()
 
 def personal_two():
     personal_two = data_filled["personal_two"]
@@ -137,7 +130,8 @@ def personal_two():
 
     dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlAPP_NATL",personal_two['country'])
 
-    save_and_continue()
+    # save_and_continue()
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton3").click()
 
 def travel():
     travel = data_filled["travel"]
@@ -175,21 +169,24 @@ def travel():
 
     dropdown_process("ctl00_SiteContentPlaceHolder_FormView1_ddlWhoIsPaying",travel['paying'])
 
-    save_and_continue()
+    # save_and_continue()
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton3").click()
 
 def travel_companions():
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_lblOtherPersonsTravelingWithYou")
 
     no_selected("fieldset-group")
 
-    save_and_continue()
+    # save_and_continue()
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton3").click()
 
 def previous_travel():
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_lblPREV_US_TRAVEL_IND")
     
     no_selected("fieldset-group")
 
-    save_and_continue()
+    # save_and_continue()
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton3").click()
 
 def address_and_phone():
     address_and_phone = data_filled["address_and_phone"]
@@ -222,7 +219,8 @@ def address_and_phone():
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_rblAddSocial_1").click()
 
-    save_and_continue()
+    # save_and_continue()
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton3").click()
 
 def passport_info():
     passport_info = data_filled["passport_info"]
@@ -254,7 +252,8 @@ def passport_info():
     Issued_Year="ctl00_SiteContentPlaceHolder_FormView1_tbxPPT_ISSUEDYear"
     DOB_input(Issued_Day,passport_info["day"],Issued_Month,passport_info["month"],Issued_Year,passport_info["year"])
 
-    save_and_continue()
+    # save_and_continue()
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton3").click()
 
 def contract_info():
     contract_info = data_filled["contract_info"]
@@ -283,7 +282,8 @@ def contract_info():
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxUS_POC_EMAIL_ADDR").send_keys(contract_info["email"])
 
-    save_and_continue()
+    # save_and_continue()
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton3").click()
 
 def family_info():
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_lblFATHER_SURNAME")
@@ -296,7 +296,8 @@ def family_info():
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_rblUS_OTHER_RELATIVE_IND_1").click()
 
-    save_and_continue()
+    # save_and_continue()
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton3").click()
 
 def present_work():
     present_work = data_filled["present_work"]
@@ -330,14 +331,16 @@ def present_work():
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_tbxDescribeDuties").send_keys(present_work["detailed_duty"])
 
-    save_and_continue()
+    # save_and_continue()
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton3").click()
 
 def previous_work():
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_lblPreviouslyEmployed")
 
     no_selected("fieldset-group")
 
-    save_and_continue()
+    # save_and_continue()
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton3").click()
    
 def additional_work():
     additional_work = data_filled["additional_work"]
@@ -348,14 +351,16 @@ def additional_work():
 
     driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_FormView1_dtlLANGUAGES_ctl00_tbxLANGUAGE_NAME").send_keys(additional_work["language"])
 
-    save_and_continue()
+    # save_and_continue()
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton3").click()
 
 def security_check():
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_FormView1_Label5")
 
     no_selected("fieldset-group")
 
-    save_and_continue()
+    # save_and_continue()
+    driver.find_element(By.ID, "ctl00_SiteContentPlaceHolder_UpdateButton3").click()
 
 def photo_uploaded():
     Explicit_Wait_func("ctl00_SiteContentPlaceHolder_btnUploadPhoto")
