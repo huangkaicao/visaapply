@@ -1,20 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Edit JSON</title>
 </head>
+
 <body>
     <form method="post">
         {% for category, details in data.items() %}
         <h2>{{ category }}</h2><br>
-            {% for key, value in details.items() %}
-                <label for="{{ key }}">{{ key }}</label>
-                    <input type="text" id="{{ category }}.{{ key }}" name="{{ category }}.{{ key }}" value="{{ value }}">
-                <br>
+        {% for key, value in details.items() %}
+        {% set full_key = category + '.' + key %}
+        <label for="{{ key }}">{{ key }}</label>
+        {% if full_key in dropdown_fields %}
+        <select id="{{ full_key }}" name="{{ full_key }}">
+            {% for option in dropdown_fields[full_key] %}
+            <option value="{{ option }}" {% if value==option %}selected{% endif %}>{{ option }}</option>
             {% endfor %}
+        </select>
+        {% else %}
+        <input type="text" id="{{ category }}.{{ key }}" name="{{ category }}.{{ key }}" value="{{ value }}">
+        {% endif %}
+        <br>
+        {% endfor %}
         {% endfor %}
         <button type="submit">Save</button>
     </form>
 </body>
+
 </html>

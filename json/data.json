@@ -4,8 +4,7 @@
     },
     "second_page": {
         "security_question": "What is the given name of your father's father?",
-        "security_answer": "JACK",
-        "return_date": "2024-04-10"
+        "security_answer": "JACK"
     },
     "personal_one": {
         "surname": "ZHANG",
