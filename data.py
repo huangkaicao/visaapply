@@ -39,6 +39,9 @@ def form():
         with open(data_path, 'r') as file:
             data = json.load(file)
         for form_key, value in updated_data.items():
+            if not value.strip():
+                print("Null check failed")
+                return redirect(url_for('form'))
             keys = form_key.split('.')
             if len(keys) == 2:
                 category, key = keys
